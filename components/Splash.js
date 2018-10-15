@@ -7,7 +7,7 @@ export default class Splash extends Component {
     return (
       <View style={styles.container}>
         <StatusBar
-            barStyle="light-content"
+            barStyle="dark-content"
             backgroundColor="#000"/>
         <Image 
             source={require('../images/splash.png')}
