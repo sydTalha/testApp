@@ -32,10 +32,13 @@ const styles = StyleSheet.create({
     },
     buttonContainer:{
         backgroundColor: '#1565c0',
-        paddingVertical: 15
+        height:40,
+        textAlign: 'center'
+        //paddingVertical: 15
     },
     buttonText:{
         textAlign: 'center',
+        marginTop:10,
         color: '#fff',
         fontWeight: "700"
 
