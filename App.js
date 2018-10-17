@@ -15,7 +15,7 @@ import Login from './components/Login/Login.js';
 type Props = {};
 export default class App extends Component<Props> {
   componentDidMount(){
-    SplashScreen.hide();
+    //SplashScreen.hide();
   }
   render() {
     return (

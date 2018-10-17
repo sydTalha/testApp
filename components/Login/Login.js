@@ -5,6 +5,7 @@ import LoginForm from './LoginForm.js';
 export default class Login extends Component {
   render() {
     return (
+        
         <KeyboardAvoidingView behavior="padding" style={styles.container}>
             <View style={styles.logoContainer}>
                 <Image 
