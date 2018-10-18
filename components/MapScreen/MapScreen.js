@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import {StyleSheet, Text, View, Button, Image} from 'react-native';
 import Mapbox from '@mapbox/react-native-mapbox-gl';
+import Polyline from '@mapbox/polyline';
+
 Mapbox.setAccessToken('pk.eyJ1Ijoic3lkdGFsaGEiLCJhIjoiY2puY3R3ODFyMWtwMDNwcDZvNmFoNnAzcCJ9.Cvdtw4xWUBrhC5elbXMCjw');
 
 export default class MapScreen extends Component {
@@ -31,6 +33,8 @@ export default class MapScreen extends Component {
                     }
                 ]
             },
+
+            coords:[]
         }
     }
     
@@ -53,6 +57,27 @@ export default class MapScreen extends Component {
 
       </Mapbox.PointAnnotation>
     )
+  }
+
+  async getDirections(startLoc, destinationLoc ){
+      try {
+          let response=await fetch(`https://api.openrouteservice.org/directions?api_key=5b3ce3597851110001cf6248cfc80d2350644635aad28e4cb01ac4c2&coordinates=${startLoc}%7C${destinationLoc}&profile=driving-car&format=json&units=km&geometry_format=polyline&instructions=false`{
+              method:'GET'
+          })
+          let responseJson=await response.json();
+          let points=Polyline.decode(response.routes[0].geometry[0].overview_polyline.points);
+          let coords=points.map((point, index)=>{
+              return {
+                  latitude: point[0],
+                  longitude: point[1]
+              }
+          })
+          this.setState({coords: coords})
+          return coords
+      } catch (error) {
+          alert(error)
+          return error
+      }
   }
 
   render(){
