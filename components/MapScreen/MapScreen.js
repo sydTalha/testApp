@@ -1,9 +1,39 @@
 import React, { Component } from 'react';
-import {StyleSheet, Text, View, Button} from 'react-native';
+import {StyleSheet, Text, View, Button, Image} from 'react-native';
 import Mapbox from '@mapbox/react-native-mapbox-gl';
 Mapbox.setAccessToken('pk.eyJ1Ijoic3lkdGFsaGEiLCJhIjoiY2puY3R3ODFyMWtwMDNwcDZvNmFoNnAzcCJ9.Cvdtw4xWUBrhC5elbXMCjw');
 
 export default class MapScreen extends Component {
+
+    constructor(){
+        super();
+        this.state={
+            route:
+            {
+                "type" : "FeatureCollection",
+                "features": [
+                    {
+                        "type":"Feature",
+                        "properties":{},
+                        "geometry":{
+                            "type":"LineString",
+                            "coordinates":[
+                                [
+                                    11.254,
+                                    43.772
+                                ],
+                                [
+                                    11.256,
+                                    43.770
+                                ]
+                            ]
+                        }
+                    }
+                ]
+            },
+        }
+    }
+    
   renderAnnotations() {
     return (
       <Mapbox.PointAnnotation
@@ -14,10 +44,11 @@ export default class MapScreen extends Component {
         
         <Text style={{marginBottom:5, fontWeight:'700'}}>G-10 Stop</Text>
         <View style={styles.annotationContainer}>
-        
-            <View style={styles.annotationFill}/>
+            <Image
+            style={{width:30, height:30}} 
+            source={require('../../images/busIcon.jpg')}/>
         </View>
-        
+            
         <Mapbox.Callout title='Look an Annotation!'/>
 
       </Mapbox.PointAnnotation>
@@ -25,6 +56,7 @@ export default class MapScreen extends Component {
   }
 
   render(){
+      
       return(
           <View style={styles.container}>
             <Mapbox.MapView
@@ -33,10 +65,12 @@ export default class MapScreen extends Component {
                 centerCoordinate={[11.256, 43.770]}
                 showUserLocation={true}
                 style={styles.container}>
-                <LineLayer
-                    
-                />
+
+
                 {this.renderAnnotations()}
+                <Mapbox.ShapeSource id='line1' shape={this.state.route}>
+                    <Mapbox.LineLayer id='linelayer1' style={{lineColor:'red'}}/>
+                </Mapbox.ShapeSource>
             </Mapbox.MapView>
           </View>
       );
@@ -49,10 +83,10 @@ const styles=StyleSheet.create({
     annotationContainer:{
         width:30,
         height:30,
-        alignItems:'center',
+        //alignItems:'center',
         justifyContent:'center',
-        backgroundColor:'white',
-        borderRadius:15,
+        //backgroundColor:'white',
+        borderRadius:10,
     },
     annotationFill:{
         width:30,
