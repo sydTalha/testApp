@@ -38,6 +38,10 @@ export default class MapScreen extends Component {
         }
     }
     
+    componentDidMount(){
+        console.log('hello');
+        this.getDirections("43.772,11.254", "43.770,11.256")
+    }
   renderAnnotations() {
     return (
       <Mapbox.PointAnnotation
@@ -61,11 +65,12 @@ export default class MapScreen extends Component {
 
   async getDirections(startLoc, destinationLoc ){
       try {
-          let response=await fetch(`https://api.openrouteservice.org/directions?api_key=5b3ce3597851110001cf6248cfc80d2350644635aad28e4cb01ac4c2&coordinates=${startLoc}%7C${destinationLoc}&profile=driving-car&format=json&units=km&geometry_format=polyline&instructions=false`{
+          let response=await fetch(`https://api.openrouteservice.org/directions?api_key=5b3ce3597851110001cf6248cfc80d2350644635aad28e4cb01ac4c2&coordinates=11.254,43.772%7C11.256,43.770&profile=driving-car`,{
               method:'GET'
-          })
+          });
           let responseJson=await response.json();
-          let points=Polyline.decode(response.routes[0].geometry[0].overview_polyline.points);
+          
+          let points=Polyline.decode(responseJson.routes[0].geometry);
           let coords=points.map((point, index)=>{
               return {
                   latitude: point[0],
@@ -93,9 +98,17 @@ export default class MapScreen extends Component {
 
 
                 {this.renderAnnotations()}
-                <Mapbox.ShapeSource id='line1' shape={this.state.route}>
+                {/* <Mapbox.ShapeSource id='line1' shape={this.state.route}>
                     <Mapbox.LineLayer id='linelayer1' style={{lineColor:'red'}}/>
-                </Mapbox.ShapeSource>
+                </Mapbox.ShapeSource> */}
+
+                <Mapbox.Polyline
+                coordinates={this.state.coords}
+                strokeWidth={2}
+                strokeColor="red"
+                />
+
+
             </Mapbox.MapView>
           </View>
       );

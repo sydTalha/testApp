@@ -11,6 +11,7 @@ import {StyleSheet, Text, View} from 'react-native';
 import SplashScreen from 'react-native-splash-screen';
 import Login from './components/Login/Login.js';
 import MapScreen from './components/MapScreen/MapScreen.js';
+import MainScreen from './components/MainScreen/MainScreen.js';
 
 type Props = {};
 export default class App extends Component<Props> {
@@ -20,6 +21,7 @@ export default class App extends Component<Props> {
   render() {
     return (
       
+      //<MainScreen/>
       <MapScreen/>
       
       
