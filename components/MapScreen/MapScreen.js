@@ -64,13 +64,15 @@ export default class MapScreen extends Component {
   }
 
   async getDirections(startLoc, destinationLoc ){
-      try {
-          let response=await fetch(`https://api.openrouteservice.org/directions?api_key=5b3ce3597851110001cf6248cfc80d2350644635aad28e4cb01ac4c2&coordinates=11.254,43.772%7C11.256,43.770&profile=driving-car`,{
-              method:'GET'
-          });
+    const APIKEY='AIzaSyA4zaZ9YUl2MVu7TZCtkdt8LzyEmvoswB4';
+    try {
+        //   let response=await fetch(`https://api.openrouteservice.org/directions?api_key=5b3ce3597851110001cf6248cfc80d2350644635aad28e4cb01ac4c2&coordinates=11.254,43.772%7C11.256,43.770&profile=driving-car`,{
+        //       method:'GET'
+        //   });
+          let response=await fetch(`https://maps.googleapis.com/maps/api/directions/json?origin=${startLoc}&destination=${destinationLoc}&key=AIzaSyA4zaZ9YUl2MVu7TZCtkdt8LzyEmvoswB4`)  
           let responseJson=await response.json();
           
-          let points=Polyline.decode(responseJson.routes[0].geometry);
+          let points=Polyline.decode(responseJson.routes[0].overview_polyline.points);
           let coords=points.map((point, index)=>{
               return {
                   latitude: point[0],
@@ -87,6 +89,29 @@ export default class MapScreen extends Component {
 
   render(){
       
+    const shape={
+        type: 'Feature',
+        properties: {},
+        geometry:{
+            type:'LineString',
+            coordinates:this.state.coords,
+        },
+    }
+
+    const route=
+    {
+        "type" : "FeatureCollection",
+        "features": [
+            {
+                "type":"Feature",
+                "properties":{},
+                "geometry":{
+                    "type":"LineString",
+                    "coordinates":this.state.coords
+                }
+            }
+        ]
+    }
       return(
           <View style={styles.container}>
             <Mapbox.MapView
@@ -98,15 +123,15 @@ export default class MapScreen extends Component {
 
 
                 {this.renderAnnotations()}
-                {/* <Mapbox.ShapeSource id='line1' shape={this.state.route}>
+                <Mapbox.ShapeSource id='line1' shape={route}>
                     <Mapbox.LineLayer id='linelayer1' style={{lineColor:'red'}}/>
-                </Mapbox.ShapeSource> */}
+                </Mapbox.ShapeSource>
 
-                <Mapbox.Polyline
+                {/* <Polyline
                 coordinates={this.state.coords}
                 strokeWidth={2}
                 strokeColor="red"
-                />
+                /> */}
 
 
             </Mapbox.MapView>
